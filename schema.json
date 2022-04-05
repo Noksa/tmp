@@ -1,6 +1,4 @@
 {
-  "$schema": "http://json-schema.org/draft-06/schema#",
-  "$id": "https://oobitv2-docs.ingress.ooma.com/oobit.schema.json",
   "title": "Ooobit Json Schema",
   "$ref": "#/definitions/Root",
   "type": "object",
@@ -47,13 +45,11 @@
               "properties": {
                 "charSet": {
                   "type": "integer",
-                  "description": "An icon to be used in spinner. Valid values between 0 and 90. Mutually exclusive 
-with customChars. If the latter is set, it will take precedence"
+                  "description": "An icon to be used in spinner. Valid values between 0 and 90. Mutually exclusive with customChars. If the latter is set, it will take precedence"
                 },
                 "customChars": {
                   "type": "string",
-                  "description": "Custom charts which will be used as spinner character. Mutually exclusive with 
-charSet"
+                  "description": "Custom charts which will be used as spinner character. Mutually exclusive with charSet"
                 },
                 "icon": {
                   "type": "boolean",
@@ -182,8 +178,7 @@ charSet"
         },
           "placeholder": {
           "type": "string",
-          "description": "A placeholder for image tag which is changed to appropriate tag (latest or shortsha). By 
-default has name: PROJECTNAME_IMAGE_TAG"
+          "description": "A placeholder for image tag which is changed to appropriate tag (latest or shortsha). By default has name: PROJECTNAME_IMAGE_TAG"
         }
       }
     },
@@ -210,8 +205,7 @@ default has name: PROJECTNAME_IMAGE_TAG"
         },
         "values": {
           "type": "string",
-          "description": "Path to values file which will be used when the chart is being installed. Relative from 
-project's root"
+          "description": "Path to values file which will be used when the chart is being installed. Relative from project's root"
         },
         "tests": {
           "type": "boolean"
@@ -400,8 +394,7 @@ project's root"
         },
         "checkout": {
           "type": "boolean",
-          "description": "Should the project be checked out from git in checkout command. Should be false for 
-modules"
+          "description": "Should the project be checked out from git in checkout command. Should be false for modules"
         },
         "build": {
           "type": "object",
@@ -409,8 +402,7 @@ modules"
           "properties": {
             "enabled": {
               "type": "boolean",
-              "description": "If the project should be built - set true. If the project is a module and only a 
-parent should be built - set false"
+              "description": "If the project should be built - set true. If the project is a module and only a parent should be built - set false"
             },
             "exportDir": {
               "type": "string",
@@ -449,8 +441,7 @@ parent should be built - set false"
             },
             "command": {
               "type": "string",
-              "description": "Completely overrides dockerize command. Should include binary. DO NOT USE it if 
-you're not aware what you're doing"
+              "description": "Completely overrides dockerize command. Should include binary. DO NOT USE it if you're not aware what you're doing"
             }
           }
         },
