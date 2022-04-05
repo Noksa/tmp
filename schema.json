@@ -1,0 +1,477 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$id": "https://oobitv2-docs.ingress.ooma.com/oobit.schema.json",
+  "title": "Ooobit Json Schema",
+  "$ref": "#/definitions/Root",
+  "type": "object",
+  "definitions": {
+    "Root": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "anchors": {
+          "$ref": "#/definitions/Anchors"
+        },
+        "global": {
+          "$ref": "#/definitions/Global"
+        },
+        "projects": {
+          "$ref": "#/definitions/Projects"
+        }
+      },
+      "title": "Root"
+    },
+    "Anchors": {
+      "type": "object",
+      "title": "Anchors"
+    },
+    "Global": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "variables": {
+          "$ref": "#/definitions/Variables",
+          "description": "A set of variables which are used in oobit's commands"
+        },
+        "logs": {
+          "$ref": "#/definitions/Logs",
+          "description": "Logging settings"
+        },
+        "oobit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "spinner": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "charSet": {
+                  "type": "integer",
+                  "description": "An icon to be used in spinner. Valid values between 0 and 90. Mutually exclusive 
+with customChars. If the latter is set, it will take precedence"
+                },
+                "customChars": {
+                  "type": "string",
+                  "description": "Custom charts which will be used as spinner character. Mutually exclusive with 
+charSet"
+                },
+                "icon": {
+                  "type": "boolean",
+                  "description": "Enable or disable spinner's icon"
+                },
+                "duration": {
+                  "type": "boolean",
+                  "description": "Print a command duration when spinner is active"
+                },
+                "updateSpeedMs": {
+                  "type": "integer",
+                  "description": "Spinner update speed in milliseconds. Must be > 0"
+                }
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "variables"
+      ],
+      "title": "Global"
+    },
+    "Logs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dir": {
+          "type": "string",
+          "description": "The main directory for all logs which are produced by oobit"
+        }
+      },
+      "required": [
+        "dir"
+      ],
+      "title": "Logs"
+    },
+    "Variables": {
+      "type": "object",
+      "title": "Variables"
+    },
+    "Oobit": {
+      "type": "object",
+      "title": "Oobit",
+      "description": "Customize oobit settings here",
+      "additionalProperties": false,
+      "properties": {
+        "spinner": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Spinner settings"
+        }
+      }
+    },
+    "CoverageSpecificSettings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "threshold": {
+          "type": "number",
+          "description": "Threshold"
+        },
+        "target": {
+          "type": "number",
+          "description": "Target"
+        }
+      }
+    },
+    "Projects": {
+      "title": "Projects",
+      "description": "A set of projects with their settings",
+      "patternProperties": {
+        ".*": {
+          "$ref": "#/definitions/Project",
+          "description": "The name of a project"
+        }
+      }
+    },
+    "Image": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Settings for docker image",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of an image. Shouldn't contain registry and repository. Only name"
+        },
+        "dockerfile": {
+          "type": "string",
+          "description": "Path to a dockerfile. Relative from root"
+        },
+        "dockerignore": {
+          "type": "string",
+          "description": "Path to a dockerfile. Relative from root"
+        },
+        "logs": {
+          "type": "array",
+          "additionalProperties": false,
+          "items": {
+            "type": "object",
+            "properties": {
+              "command": {
+                "type": "string"
+              },
+              "saveTo": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "context": {
+          "type": "string",
+          "description": "Dockerfile context. Relative from project's root"
+        },
+        "restoreToContext": {
+          "type": "array",
+          "description": "Copy from context dirs/files before dockerizing and restore them after",
+          "items": {
+            "type": "string"
+          }
+        },
+        "copyToContext": {
+        "type": "array",
+          "items": {
+          "$ref": "#/definitions/CopyContextItem"}
+        },
+          "placeholder": {
+          "type": "string",
+          "description": "A placeholder for image tag which is changed to appropriate tag (latest or shortsha). By 
+default has name: PROJECTNAME_IMAGE_TAG"
+        }
+      }
+    },
+    "CopyContextItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        }
+      }
+    },
+    "HelmApp": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Settings for helm main chart",
+      "properties": {
+        "chart": {
+          "type": "string",
+          "description": "Chart's name to be used. Just name, without any path"
+        },
+        "values": {
+          "type": "string",
+          "description": "Path to values file which will be used when the chart is being installed. Relative from 
+project's root"
+        },
+        "tests": {
+          "type": "boolean"
+        },
+        "args": {
+          "type": "array",
+          "description": "Additional arguments to be passed to install/upgrade commands",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "HelmItSuite": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Settings for helm IT suite chart",
+      "properties": {
+        "chart": {
+          "type": "string",
+          "description": "Chart's name to be used. Just name, without any path"
+        },
+        "args": {
+          "type": "array",
+          "description": "Additional arguments to be passed to install/upgrade commands",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Project": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "root": {
+          "type": "string",
+          "description": "Directory where the project is located (or should be checked out)"
+        },
+        "type": {
+          "oneOf": [
+            {"enum": ["golang"]},
+            {"enum": ["java-maven"]},
+            {"enum": ["java-gradle"]},
+            {"enum": ["js"]}
+          ],
+          "description": "Type of project"
+        },
+        "tests": {
+          "type": "boolean"
+        },
+        "gitlab": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "projectName": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "projectName"
+          ]
+        },
+        "findbugs": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "command": {
+              "type": "string"
+            },
+            "threshold": {
+              "type": "number",
+              "description": "Find bugs threshold"
+            },
+            "resultFilePath": {
+              "type": "string",
+              "description": "target/spotbugsXml.xml"
+            }
+          }
+        },
+        "checkstyle": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "threshold": {
+              "type": "number",
+              "description": "Checktyle threshold"
+            },
+            "resultFilePath": {
+              "type": "string",
+              "description": "target/checkstyle-result.xml by default"
+            }
+          }
+        },
+        "coverage": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "unit": {
+              "$ref": "#/definitions/CoverageSpecificSettings"
+            },
+            "sourceDir": {
+              "type": "string"
+            },
+            "classFilesDir": {
+              "type": "string"
+            },
+            "skip": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "classes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "packages": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "required": [
+            "sourceDir",
+            "classFilesDir",
+            "enabled"
+          ]
+        },
+        "version": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "getFrom": {
+              "oneOf": [
+                {"enum": ["string"]},
+                {"enum": ["dockerfileInfo"] },
+                {"enum": ["command"]},
+                {"enum": ["pom"]}
+              ]
+            },
+            "string": {
+              "type": "string"
+            },
+            "command": {
+              "type": "string"
+            },
+            "dockerfileInfo": {
+              "type": "string"
+            },
+            "pom": {
+              "type": "string"
+            }
+          }
+        },
+        "modes": {
+          "type": "array",
+          "description": "Set of modes in which project is used",
+          "items": {
+            "type": "string"
+          }
+        },
+        "git": {
+          "properties": {
+            "revision": {
+              "type": "string",
+              "description": "Branch or commit"
+            },
+            "url": {
+              "type": "string",
+              "description": "Repository URL"
+            }
+          }
+        },
+        "checkout": {
+          "type": "boolean",
+          "description": "Should the project be checked out from git in checkout command. Should be false for 
+modules"
+        },
+        "build": {
+          "type": "object",
+          "description": "Settings for build command",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "If the project should be built - set true. If the project is a module and only a 
+parent should be built - set false"
+            },
+            "exportDir": {
+              "type": "string",
+              "description": "Where build artifacts should be exported. By default it depends on the project type"
+            },
+            "command": {
+              "type": "string",
+              "description": "Override default build command"
+            }
+          }
+        },
+        "dockerize": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Settings for dockerize command",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Should be dockerized"
+            },
+            "k8s": {
+              "type": "boolean",
+              "description": "Should be dockerized when env is k8s. By default is true"
+            },
+            "push": {
+              "type": "boolean",
+              "description": "can be pushed when --push is used in dockerize command. Default is true"
+            },
+            "compose": {
+              "type": "boolean",
+              "description": "Should be dockerized when env is compose. By default is true"
+            },
+            "image": {
+              "$ref": "#/definitions/Image",
+              "description": "Image settings"
+            },
+            "command": {
+              "type": "string",
+              "description": "Completely overrides dockerize command. Should include binary. DO NOT USE it if 
+you're not aware what you're doing"
+            }
+          }
+        },
+        "modules": {
+          "description": "A set of modules for the project if any",
+          "patternProperties": {
+            ".*": {
+              "$ref": "#/definitions/Project",
+              "description": "Module settings"
+            }
+          }
+        },
+        "helm": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/HelmApp"
+          }
+        }
+      },
+      "title": "Project"
+    }
+  }
+}
+
